@@ -1,1 +1,42 @@
-.
+1) Comparativo entre as arquiteturas de computadores de 8, 16, 32 e 64 bits.
+
+A largura em bits de uma arquitetura refere-se, de modo geral, ao tamanho da palavra (word) que o processador manipula nativamente, isto é, à quantidade de bits que a unidade lógica e aritmética (ULA), os registradores e o barramento de dados conseguem tratar em uma única operação. Esse parâmetro influencia diretamente a capacidade de processamento, a faixa de valores representáveis e o espaço de endereçamento da máquina.
+
+Nas arquiteturas de 8 bits, como o Intel 8080, o Zilog Z80 e o MOS 6502, os registradores e a ULA operam sobre valores de um byte, o que permite representar números inteiros sem sinal de 0 a 255. Como o barramento de endereços costuma ter 16 bits, o espaço endereçável fica limitado a 64 KB. Para operar com valores maiores, o processador precisa decompor a operação em várias instruções, o que reduz o desempenho. Por serem simples e baratas, essas arquiteturas dominaram os primeiros computadores pessoais, consoles antigos e, até hoje, microcontroladores de baixo custo.
+
+As arquiteturas de 16 bits, representadas pelo Intel 8086 e pelo 80286, ampliaram a palavra para dois bytes, possibilitando representar valores de até 65.535 sem sinal. Houve também expansão do endereçamento, que chegou a 1 MB no 8086 por meio da segmentação de memória, técnica que combina um registrador de segmento com um deslocamento (offset). Esse modelo trouxe maior capacidade de cálculo, mas também a complexidade do gerenciamento segmentado.
+
+Nas arquiteturas de 32 bits, como o Intel 80386 e o Pentium, a palavra passa a ter quatro bytes, com faixa de aproximadamente 4,29 bilhões de valores sem sinal. O endereçamento de 32 bits permite acessar até 2³² posições, ou seja, 4 GB de memória. Além disso, essa geração consolidou recursos como memória virtual com paginação e modo protegido, fundamentais para sistemas operacionais multitarefa modernos.
+
+As arquiteturas de 64 bits, adotadas em processadores como Intel Core, AMD Ryzen e Apple Silicon, utilizam palavras de oito bytes, com faixa de cerca de 18 quintilhões de valores sem sinal. Teoricamente, o espaço de endereçamento chegaria a 2⁶⁴ bytes (16 exabytes), embora as implementações reais usem apenas parte desses bits de endereço. A transição de 32 para 64 bits foi motivada, sobretudo, pelo limite de 4 GB de memória e pela demanda crescente por aplicações que manipulam grandes volumes de dados, além de oferecer mais registradores de uso geral e instruções mais amplas.
+
+Em síntese, o aumento da largura de bits amplia a quantidade de informação processada por ciclo, a faixa numérica representável e a memória diretamente endereçável. Em contrapartida, exige hardware mais complexo, maior consumo de recursos e software adaptado à nova arquitetura.
+
+
+
+2) Porque não existem arquiteturas de 128, 256 e 512 bits?
+
+Na verdade existem processadores com dados de 128, 256 e 512 bits. O que não existe é CPU de uso geral com palavra e endereçamento nesses tamanhos, e a razão é principalmente prática.
+
+1. Não há necessidade de endereçamento tão grande
+Com 64 bits dá para endereçar 2⁶⁴ bytes (16 EB), muito mais do que qualquer computador terá de memória nas próximas décadas. Hoje as CPUs usam só 48 a 57 bits de endereço de fato. Já 128 bits de endereçamento (2¹²⁸) passaria do número de átomos que se acredita existirem na Terra, então não resolve problema real nenhum.
+
+2. Quase ninguém precisa de inteiros tão grandes
+A maioria dos cálculos cabe em 32 ou 64 bits. Quando é preciso mais precisão (criptografia, por exemplo), o software divide o número em várias palavras de 64 bits, o que é aceitável porque é um caso raro.
+
+3. Custo e desempenho
+Registradores, ULA e barramentos mais largos consomem mais área de silício, energia e geram mais calor. Além disso, ponteiros maiores ocupam mais memória e cache: dobrar o tamanho do ponteiro significa que estruturas de dados cheias de ponteiros ficam bem maiores, reduzindo a eficiência do cache. Ou seja, o ganho seria quase nulo e o custo seria alto.
+
+4. Retornos decrescentes
+Os saltos anteriores (8 → 16 → 32 → 64) foram motivados por limites concretos de memória e precisão. Com 64 bits esse limite praticamente desapareceu, então não há pressão de mercado para ir além.
+
+O que existe de 128, 256 e 512 bits
+Esses tamanhos aparecem em instruções vetoriais (SIMD), que processam vários dados de uma vez dentro de um registrador largo:
+
+SSE: 128 bits
+AVX/AVX2: 256 bits
+AVX-512: 512 bits
+
+Também há barramentos de memória largos em GPUs (256 a 512 bits ou mais). Nesses casos, a largura serve para paralelismo de dados (gráficos, IA, cálculo científico), e não para aumentar a palavra principal do processador.
+
+Resumo: os 64 bits já cobrem com sobra as necessidades de memória e cálculo, e aumentar a palavra traria mais custo do que benefício. Por isso o crescimento migrou para o paralelismo (SIMD, múltiplos núcleos, GPUs) em vez de arquiteturas “mais largas”.
